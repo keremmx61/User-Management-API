@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UserManagementApi.Data;
+using System.Collections.Generic;
+using UserManagementApi.Interfaces;
 using UserManagementApi.Models;
 
 namespace UserManagementApi.Controllers
@@ -9,73 +9,98 @@ namespace UserManagementApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IUserService _userService;
 
-        public UsersController(AppDbContext context)
+        public UsersController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // GET: api/users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public IActionResult GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users = _userService.GetAllUsers();
+            return Ok(users);
+        }
+
+        // GET: api/users/orderbydate
+        [HttpGet("orderbydate")]
+        public IActionResult GetAllUsersOrderByDate()
+        {
+            var users = _userService.GetAllUsersOrderByDate();
+            return Ok(users);
         }
 
         // GET: api/users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public IActionResult GetUserById(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = _userService.GetUserById(id);
 
             if (user == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { message = "User not found or inactive." });
 
-            return user;
+            return Ok(user);
         }
 
         // POST: api/users
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public IActionResult AddUser(User user)
         {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);
+            _userService.AddNewUser(user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
         // PUT: api/users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public IActionResult UpdateUser(int id, User user)
         {
             if (id != user.Id)
-            {
-                return BadRequest();
-            }
+                return BadRequest(new { message = "Id mismatch" });
 
-            _context.Entry(user).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var existingUser = _userService.GetUserById(id);
+            if (existingUser == null)
+                return NotFound(new { message = "User not found or inactive" });
 
+            _userService.UpdateUser(user);
             return NoContent();
         }
 
         // DELETE: api/users/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
+        public IActionResult DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = _userService.GetUserById(id);
             if (user == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { message = "User not found" });
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
+            _userService.DeleteUserById(id);
             return NoContent();
+        }
+
+        // PATCH: api/users/softdelete/5
+        [HttpPatch("softdelete/{id}")]
+        public IActionResult SoftDeleteUserById(int id)
+        {
+            var user = _userService.GetUserById(id);
+            if (user == null)
+                return NotFound(new { Message = "User not found or inactive." });
+
+            _userService.SoftDeleteUserById(id);
+            return Ok(new { Message = "User has been soft-deleted (IsActive = false)." });
+        }
+
+        // POST: api/users/login
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequest request)
+        {
+            var result = _userService.Login(request.Email, request.Password);
+
+            if (result)
+                return Ok(new { message = "Login successful" });
+            else
+                return Unauthorized(new { message = "Invalid email or password" });
         }
     }
 }

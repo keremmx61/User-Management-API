@@ -11,8 +11,8 @@ using UserManagementApi.Data;
 namespace UserManagementApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250707170024_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250712140014_AddIsActiveField")]
+    partial class AddIsActiveField
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace UserManagementApi.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
