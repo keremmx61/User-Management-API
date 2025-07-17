@@ -177,6 +177,7 @@ C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\Humanizer.dll
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\Microsoft.Build.Locator.dll
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\Microsoft.CodeAnalysis.dll
@@ -315,6 +316,7 @@ C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.csproj.AssemblyReference.cache
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rpswa.dswa.cache.json
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.AssemblyInfoInputs.cache
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.AssemblyInfo.cs
@@ -322,8 +324,12 @@ C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.sourcelink.json
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\scopedcss\bundle\UserManagementApi.styles.css
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
@@ -333,8 +339,3 @@ C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.pdb
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.genruntimeconfig.cache
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\ref\UserManagementApi.dll
-C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rpswa.dswa.cache.json
-C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rjimswa.dswa.cache.json
-C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
-C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
-C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\staticwebassets.build.json.cache

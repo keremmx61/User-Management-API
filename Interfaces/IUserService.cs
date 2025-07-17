@@ -13,6 +13,8 @@ namespace UserManagementApi.Interfaces
         bool Login(string email, string password);
         List<User> GetAllUsersOrderByDate();
 
+        User GetUserByEmail(string email);
+
 
     }
 }

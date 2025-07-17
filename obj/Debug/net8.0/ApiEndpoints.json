@@ -96,8 +96,34 @@
   },
   {
     "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "Logout",
+    "RelativePath": "api/Users/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "UserManagementApi.Models.LogoutRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
     "Method": "GetAllUsersOrderByDate",
     "RelativePath": "api/Users/orderbydate",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "SecretData",
+    "RelativePath": "api/Users/secret",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

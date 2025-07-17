@@ -20,5 +20,12 @@ namespace UserManagementApi.Helpers
                 return sb.ToString();
             }
         }
+
+        // Verify metodu: şifreyi hash'ler ve verilen hash ile karşılaştırır
+        public static bool Verify(string password, string hashedPassword)
+        {
+            var hashedInput = Hash(password);
+            return hashedInput == hashedPassword;
+        }
     }
 }

@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using UserManagementApi.Helpers;
 using UserManagementApi.Interfaces;
 using UserManagementApi.Models;
+using UserManagementApi.Services; // TokenService için namespace ekle
 
 namespace UserManagementApi.Controllers
 {
@@ -10,10 +13,12 @@ namespace UserManagementApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly TokenService _tokenService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, TokenService tokenService)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         // GET: api/users
@@ -43,6 +48,15 @@ namespace UserManagementApi.Controllers
 
             return Ok(user);
         }
+
+        // GET: api/users/secret
+        [Authorize]
+        [HttpGet("secret")]
+        public IActionResult SecretData()
+        {
+            return Ok("🎉 Bu veriyi sadece token sahibi kullanıcılar görebilir.");
+        }
+
 
         // POST: api/users
         [HttpPost]
@@ -95,12 +109,41 @@ namespace UserManagementApi.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
-            var result = _userService.Login(request.Email, request.Password);
+            try
+            {
+                var loginSuccess = _userService.Login(request.Email, request.Password);
+                if (!loginSuccess)
+                    return Unauthorized(new { message = "Geçersiz email veya şifre." });
 
-            if (result)
-                return Ok(new { message = "Login successful" });
-            else
-                return Unauthorized(new { message = "Invalid email or password" });
+                var user = _userService.GetUserByEmail(request.Email);
+
+                var token = _tokenService.CreateToken(user);
+
+                return Ok(new
+                {
+                    message = "Giriş başarılı",
+                    token = token
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
+
+        [HttpPost("logout")]
+        public IActionResult Logout([FromBody] LogoutRequest request)
+        {
+            var user = _userService.GetUserByEmail(request.Email);
+
+            if (user == null || !user.IsLoggedIn)
+                return BadRequest(new { message = "Kullanıcı zaten çıkış yapmış veya bulunamadı." });
+
+            user.IsLoggedIn = false;
+            _userService.UpdateUser(user);
+
+            return Ok(new { message = "Çıkış başarılı." });
+        }
+
     }
 }

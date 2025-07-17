@@ -8,6 +8,8 @@
         public string Email { get; set; }
         public string Password { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsLoggedIn { get; set; } = false;
+
         public DateTime InsertDate { get; set; } = DateTime.Now;
     }
 }
