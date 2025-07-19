@@ -1,89 +1,78 @@
-﻿using UserManagementApi.Helpers;
-using UserManagementApi.Data;
-using UserManagementApi.Interfaces;
-using UserManagementApi.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using UserManagementApi.Data;
+using UserManagementApi.Helpers;
+using UserManagementApi.Interfaces;
+using UserManagementApi.Models;
 
 namespace UserManagementApi.Implements
 {
     public class UserService : IUserService
     {
+        private readonly IUserRepository _userRepository;
         private readonly AppDbContext _context;
         private readonly ILogger<UserService> _logger;
         private static readonly object _lock = new object();
 
-        public UserService(AppDbContext context, ILogger<UserService> logger)
+        public UserService(IUserRepository userRepository, AppDbContext context, ILogger<UserService> logger)
         {
+            _userRepository = userRepository;
             _context = context;
             _logger = logger;
         }
 
         public List<User> GetAllUsers()
         {
-            return _context.Users.Where(u => u.IsActive).ToList();
+            return _userRepository.GetAll();
         }
 
         public User GetUserById(int id)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == id && u.IsActive);
+            return _userRepository.GetById(id);
         }
 
         public User GetUserByEmail(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Email == email && u.IsActive);
+            var user = _userRepository.GetByEmail(email);
             _logger.LogInformation($"GetUserByEmail: Email={email}, UserFound={user != null}, IsLoggedIn={user?.IsLoggedIn}");
             return user;
         }
 
         public List<User> GetAllUsersOrderByDate()
         {
-            return _context.Users
-                .Where(u => u.IsActive)
-                .OrderByDescending(u => u.InsertDate)
-                .ToList();
+            return _userRepository.GetAll().OrderByDescending(u => u.InsertDate).ToList();
         }
 
         public void AddNewUser(User user)
         {
             user.Password = PasswordHasher.Hash(user.Password);
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            _userRepository.Add(user);
         }
 
         public void UpdateUser(User user)
         {
-            var existingUser = _context.Users.Find(user.Id);
+            var existingUser = _userRepository.GetById(user.Id);
             if (existingUser != null)
             {
                 existingUser.Name = user.Name;
                 existingUser.Username = user.Username;
                 existingUser.Email = user.Email;
                 existingUser.IsLoggedIn = user.IsLoggedIn;
-                _context.SaveChanges();
+                _userRepository.Update(existingUser);
                 _logger.LogInformation($"UpdateUser: Id={user.Id}, IsLoggedIn={user.IsLoggedIn}");
             }
         }
 
         public void DeleteUserById(int id)
         {
-            var user = _context.Users.Find(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                _context.SaveChanges();
-            }
+            _userRepository.Delete(id);
         }
 
         public void SoftDeleteUserById(int id)
         {
-            var user = _context.Users.Find(id);
-            if (user != null)
-            {
-                user.IsActive = false;
-                _context.SaveChanges();
-            }
+            _userRepository.SoftDelete(id);
         }
 
         public bool Login(string email, string password)
@@ -96,7 +85,6 @@ namespace UserManagementApi.Implements
                     {
                         _logger.LogInformation($"Login: Başlangıç. Email={email}");
 
-                        // Kullanıcıyı kilitleyip sorgula
                         var user = _context.Users
                             .FromSqlRaw("SELECT * FROM Users WITH (UPDLOCK) WHERE Email = {0} AND IsActive = 1", email)
                             .FirstOrDefault();
@@ -113,11 +101,9 @@ namespace UserManagementApi.Implements
                             return false;
                         }
 
-                        _logger.LogInformation($"Login: Kullanıcı bulundu. Email={email}, IsLoggedIn={user.IsLoggedIn}");
-
                         if (user.IsLoggedIn)
                         {
-                            _logger.LogWarning($"Login: Kullanıcı zaten giriş yapmış. Email={email}, IsLoggedIn={user.IsLoggedIn}");
+                            _logger.LogWarning($"Login: Kullanıcı zaten giriş yapmış. Email={email}");
                             throw new Exception("Bu kullanıcı zaten giriş yapmış.");
                         }
 
@@ -127,7 +113,6 @@ namespace UserManagementApi.Implements
                         _logger.LogInformation($"Login: IsLoggedIn=true ayarlandı. Email={email}");
 
                         transaction.Commit();
-                        _logger.LogInformation($"Login: Transaction tamamlandı. Email={email}");
                         return true;
                     }
                 }

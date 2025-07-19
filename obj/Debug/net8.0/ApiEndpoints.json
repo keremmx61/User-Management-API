@@ -80,6 +80,46 @@
   },
   {
     "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "AdminOnlyData",
+    "RelativePath": "api/Users/admin-only",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "AdminOrManagerData",
+    "RelativePath": "api/Users/admin-or-manager",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "DecodeToken",
+    "RelativePath": "api/Users/decode",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "GetUserDtos",
+    "RelativePath": "api/Users/dtos",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
     "Method": "Login",
     "RelativePath": "api/Users/login",
     "HttpMethod": "POST",
@@ -108,6 +148,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "ManagerOnlyData",
+    "RelativePath": "api/Users/manager-only",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -144,6 +194,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "UserOnlyData",
+    "RelativePath": "api/Users/user-only",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

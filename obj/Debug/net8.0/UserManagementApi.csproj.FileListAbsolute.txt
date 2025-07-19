@@ -339,3 +339,5 @@ C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.pdb
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\UserManagementApi.genruntimeconfig.cache
 C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\obj\Debug\net8.0\ref\UserManagementApi.dll
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\Kerem\source\repos\UserManagementApi\UserManagementApi\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

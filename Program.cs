@@ -10,18 +10,18 @@ using UserManagementApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Logging yapılandırması
+// 1. Logging
 builder.Services.AddLogging(logging =>
 {
     logging.AddConsole();
     logging.AddDebug();
 });
 
-// JWT Ayarlarını alma ve anahtarı hazırlama
+// 2. JWT Settings
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
-// JWT Authentication middleware'i ekleme
+// 3. JWT Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -40,8 +40,6 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ClockSkew = TimeSpan.Zero
     };
-    options.SaveToken = true;
-    options.RequireHttpsMetadata = false;
     options.Events = new JwtBearerEvents
     {
         OnAuthenticationFailed = context =>
@@ -62,16 +60,21 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Bağımlılık enjeksiyonları
-builder.Services.AddControllers();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<TokenService>();
+// 4. Authorization
 builder.Services.AddAuthorization();
 
+// 5. Dependency Injections
+builder.Services.AddControllers();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<TokenService>();
+builder.Services.AddAutoMapper(typeof(Program));
+
+// 6. DB Context
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Swagger konfigürasyonu
+// 7. Swagger Ayarı - JWT destekli
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -79,7 +82,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "JWT Bearer token'ınızı aşağıya yazın: 'Bearer <token>'",
+        Description = "JWT token'ınızı aşağıya şu şekilde girin: Bearer <token>",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
@@ -97,7 +100,6 @@ builder.Services.AddSwaggerGen(c =>
                     Type = ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 },
-                Scheme = "Bearer",
                 Name = "Authorization",
                 In = ParameterLocation.Header
             },
@@ -108,7 +110,6 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Ortam ayarları
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -119,10 +120,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Middleware sıralaması
 app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication(); // token kontrol etme attribute
+app.UseAuthorization();  // yetki kontrolü
 
 app.MapControllers();
 

@@ -21,7 +21,6 @@ namespace UserManagementApi.Helpers
             }
         }
 
-        // Verify metodu: şifreyi hash'ler ve verilen hash ile karşılaştırır
         public static bool Verify(string password, string hashedPassword)
         {
             var hashedInput = Hash(password);

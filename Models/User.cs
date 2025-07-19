@@ -11,5 +11,9 @@
         public bool IsLoggedIn { get; set; } = false;
 
         public DateTime InsertDate { get; set; } = DateTime.Now;
+
+        public int RoleId { get; set; }
+        public Role? Role { get; set; }
+
     }
 }
