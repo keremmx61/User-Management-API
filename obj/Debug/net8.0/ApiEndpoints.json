@@ -101,7 +101,7 @@
   {
     "ContainingType": "UserManagementApi.Controllers.UsersController",
     "Method": "DecodeToken",
-    "RelativePath": "api/Users/decode",
+    "RelativePath": "api/Users/decode-token",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -200,6 +200,16 @@
     "ContainingType": "UserManagementApi.Controllers.UsersController",
     "Method": "UserOnlyData",
     "RelativePath": "api/Users/user-only",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UserManagementApi.Controllers.UsersController",
+    "Method": "GetUsersWithRolesViaSP",
+    "RelativePath": "api/Users/with-roles-sp",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

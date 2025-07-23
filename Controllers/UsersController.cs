@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -103,30 +104,43 @@ namespace UserManagementApi.Controllers
         }
 
         // Token'ı çözümle ve bilgileri göster
-        [HttpGet("decode")]
+        [Authorize]
+        [HttpGet("decode-token")]
         public IActionResult DecodeToken()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity == null)
+                return Unauthorized("Kimlik doğrulaması başarısız.");
 
-            if (identity != null)
+            var claims = identity.Claims;
+
+            var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var username = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+            var expClaim = claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp)?.Value;
+            if (expClaim == null)
+                return BadRequest("Token geçerlilik süresi bulunamadı.");
+
+            var expUnixTime = long.Parse(expClaim);
+            var expirationTime = DateTimeOffset.FromUnixTimeSeconds(expUnixTime).UtcDateTime;
+            var now = DateTime.UtcNow;
+            var timeLeft = expirationTime - now;
+
+            var tokenInfo = new TokenInfoDto
             {
-                var claims = identity.Claims;
-                var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-                var username = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-                var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+                UserId = userId,
+                Email = email,
+                Username = username,
+                Role = role,
+                ExpirationTime = expirationTime,
+                TimeLeft = timeLeft
+            };
 
-                return Ok(new
-                {
-                    userId,
-                    email,
-                    username,
-                    role
-                });
-            }
-
-            return BadRequest("Token çözümlenemedi.");
+            return Ok(tokenInfo);
         }
+
 
         // Yeni kullanıcı ekle
         [AllowAnonymous]
@@ -175,6 +189,15 @@ namespace UserManagementApi.Controllers
             _userService.SoftDeleteUserById(id);
             return Ok(new { Message = "User has been soft-deleted (IsActive = false)." });
         }
+
+        [HttpGet("with-roles-sp")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetUsersWithRolesViaSP()
+        {
+            var usersWithRoles = _userService.GetUsersWithRolesFromSP();
+            return Ok(usersWithRoles);
+        }
+
 
         // Giriş
         [AllowAnonymous]

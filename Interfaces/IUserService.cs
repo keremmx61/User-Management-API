@@ -1,4 +1,5 @@
-﻿using UserManagementApi.Models;
+﻿using UserManagementApi.Dtos;
+using UserManagementApi.Models;
 
 namespace UserManagementApi.Interfaces
 {
@@ -14,6 +15,7 @@ namespace UserManagementApi.Interfaces
         List<User> GetAllUsersOrderByDate();
 
         User GetUserByEmail(string email);
+        List<UserWithRoleDto> GetUsersWithRolesFromSP();
 
 
     }

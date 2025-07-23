@@ -214,7 +214,7 @@
         }
       }
     },
-    "/api/Users/decode": {
+    "/api/Users/decode-token": {
       "get": {
         "tags": [
           "Users"
@@ -241,6 +241,18 @@
               "format": "int32"
             }
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Users/with-roles-sp": {
+      "get": {
+        "tags": [
+          "Users"
         ],
         "responses": {
           "200": {

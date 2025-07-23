@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using UserManagementApi.Data;
+using UserManagementApi.Dtos;
 using UserManagementApi.Helpers;
 using UserManagementApi.Interfaces;
 using UserManagementApi.Models;
@@ -27,6 +28,14 @@ namespace UserManagementApi.Implements
         {
             return _userRepository.GetAll();
         }
+        public List<UserWithRoleDto> GetUsersWithRolesFromSP()
+        {
+            var result = _context.UserWithRoleDtos
+                .FromSqlRaw("EXEC GetUsersWithRoles")
+                .ToList();
+
+            return result;
+        }
 
         public User GetUserById(int id)
         {
@@ -35,7 +44,7 @@ namespace UserManagementApi.Implements
 
         public User GetUserByEmail(string email)
         {
-            var user = _userRepository.GetByEmail(email);
+            var user = _userRepository.GetByEmail(email);   
             _logger.LogInformation($"GetUserByEmail: Email={email}, UserFound={user != null}, IsLoggedIn={user?.IsLoggedIn}");
             return user;
         }

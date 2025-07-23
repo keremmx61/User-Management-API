@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using UserManagementApi.Data;
 using UserManagementApi.Interfaces;
@@ -17,17 +18,24 @@ namespace UserManagementApi.Implements
 
         public List<User> GetAll()
         {
-            return _context.Users.Where(u => u.IsActive).ToList();
+            return _context.Users
+                .Include(u => u.Role) // Rolü dahil et
+                .Where(u => u.IsActive)
+                .ToList();
         }
 
         public User GetById(int id)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == id && u.IsActive);
+            return _context.Users
+                .Include(u => u.Role) // Rolü dahil et
+                .FirstOrDefault(u => u.Id == id && u.IsActive);
         }
 
         public User GetByEmail(string email)
         {
-            return _context.Users.FirstOrDefault(u => u.Email == email && u.IsActive);
+            return _context.Users
+                .Include(u => u.Role) // Rolü dahil et
+                .FirstOrDefault(u => u.Email == email && u.IsActive);
         }
 
         public void Add(User user)
